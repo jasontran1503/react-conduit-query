@@ -1,4 +1,4 @@
-import axiosApi from '@/common/axios';
+import axiosApi from 'src/common/axios';
 
 export function setToken(token: string | null) {
   if (token) {

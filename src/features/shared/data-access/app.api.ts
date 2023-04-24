@@ -1,4 +1,4 @@
-import axiosApi from '@/common/axios';
+import axiosApi from 'src/common/axios';
 import {
   LoginUser,
   MultipleArticlesResponse,
@@ -14,8 +14,8 @@ import {
   UpdateUser,
   User,
   UserResponse
-} from '@/common/models';
-import { setToken } from '@/utils/token';
+} from 'src/common/models';
+import { setToken } from 'src/utils/token';
 
 // Article
 const getArticleBySlug = async (slug: string) => {

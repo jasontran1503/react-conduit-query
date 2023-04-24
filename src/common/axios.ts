@@ -1,5 +1,5 @@
-import { history } from '@/utils/history';
 import axios, { AxiosResponse } from 'axios';
+import { history } from 'src/utils/history';
 
 const axiosApi = axios.create({
   baseURL: 'https://api.realworld.io/api/',
