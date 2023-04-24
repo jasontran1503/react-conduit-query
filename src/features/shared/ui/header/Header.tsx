@@ -1,10 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { User } from 'src/common/models';
-import { useGetQueryData } from 'src/hooks';
 
-const Header = () => {
-  const user = useGetQueryData<User>(['user']);
-
+const Header = ({ user }: { user: User | null }) => {
   return (
     <nav className="navbar navbar-light">
       <div className="container">

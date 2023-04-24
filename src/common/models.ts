@@ -1,5 +1,7 @@
 export type ApiStatus = 'idle' | 'loading' | 'success' | 'error';
 
+export type HomeArticlesType = 'feed' | 'global' | 'tag';
+
 export interface LoginUser {
   email: string;
   password: string;

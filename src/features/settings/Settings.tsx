@@ -2,13 +2,11 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { UpdateUser, User } from 'src/common/models';
-import { useGetQueryData } from 'src/hooks';
 import appApi from '../shared/data-access/app.api';
 
-const Settings = () => {
+const Settings = ({ user }: { user: User | null }) => {
   const navigate = useNavigate();
   const client = useQueryClient();
-  const user = useGetQueryData<User>(['user']);
 
   const { mutate, isLoading } = useMutation({
     mutationFn: (updateUser: UpdateUser) => appApi.updateUser(updateUser)
@@ -16,7 +14,7 @@ const Settings = () => {
 
   const { register, handleSubmit } = useForm<UpdateUser>({
     mode: 'onChange',
-    values: user
+    values: user ? user : {}
   });
 
   const onSubmit: SubmitHandler<UpdateUser> = (formData) => {
@@ -28,71 +26,75 @@ const Settings = () => {
     });
   };
 
+  const logout = () => {
+    localStorage.removeItem('api_token');
+    client.setQueryData(['user'], null);
+    navigate('/');
+  };
+
   return (
-    <>
-      {user && (
-        <div className="settings-page">
-          <div className="container page">
-            <div className="row">
-              <div className="col-md-6 offset-md-3 col-xs-12">
-                <h1 className="text-xs-center">Your Settings</h1>
+    <div className="settings-page">
+      <div className="container page">
+        <div className="row">
+          <div className="col-md-6 offset-md-3 col-xs-12">
+            <h1 className="text-xs-center">Your Settings</h1>
 
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <fieldset>
-                    <fieldset className="form-group">
-                      <input
-                        className="form-control"
-                        type="text"
-                        placeholder="URL of profile picture"
-                        {...register('image')}
-                      />
-                    </fieldset>
-                    <fieldset className="form-group">
-                      <input
-                        className="form-control form-control-lg"
-                        type="text"
-                        placeholder="Your Name"
-                        {...register('username', { required: true })}
-                      />
-                    </fieldset>
-                    <fieldset className="form-group">
-                      <textarea
-                        className="form-control form-control-lg"
-                        rows={8}
-                        placeholder="Short bio about you"
-                        {...register('bio')}
-                      ></textarea>
-                    </fieldset>
-                    <fieldset className="form-group">
-                      <input
-                        className="form-control form-control-lg"
-                        type="text"
-                        placeholder="Email"
-                        {...register('email', { required: true })}
-                      />
-                    </fieldset>
-                    <fieldset className="form-group">
-                      <input
-                        className="form-control form-control-lg"
-                        type="password"
-                        placeholder="Password"
-                        {...register('password')}
-                      />
-                    </fieldset>
-                    <button className="btn btn-lg btn-primary pull-xs-right" disabled={isLoading}>
-                      Update Settings
-                    </button>
-                  </fieldset>
-                </form>
-                <hr />
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <fieldset>
+                <fieldset className="form-group">
+                  <input
+                    className="form-control"
+                    type="text"
+                    placeholder="URL of profile picture"
+                    {...register('image')}
+                  />
+                </fieldset>
+                <fieldset className="form-group">
+                  <input
+                    className="form-control form-control-lg"
+                    type="text"
+                    placeholder="Your Name"
+                    {...register('username', { required: true })}
+                  />
+                </fieldset>
+                <fieldset className="form-group">
+                  <textarea
+                    className="form-control form-control-lg"
+                    rows={8}
+                    placeholder="Short bio about you"
+                    {...register('bio')}
+                  ></textarea>
+                </fieldset>
+                <fieldset className="form-group">
+                  <input
+                    className="form-control form-control-lg"
+                    type="text"
+                    placeholder="Email"
+                    {...register('email', { required: true })}
+                  />
+                </fieldset>
+                <fieldset className="form-group">
+                  <input
+                    className="form-control form-control-lg"
+                    type="password"
+                    placeholder="Password"
+                    {...register('password')}
+                  />
+                </fieldset>
+                <button className="btn btn-lg btn-primary pull-xs-right" disabled={isLoading}>
+                  Update Settings
+                </button>
+              </fieldset>
+            </form>
+            <hr />
 
-                <button className="btn btn-outline-danger">Or click here to logout.</button>
-              </div>
-            </div>
+            <button className="btn btn-outline-danger" onClick={() => logout()}>
+              Or click here to logout.
+            </button>
           </div>
         </div>
-      )}
-    </>
+      </div>
+    </div>
   );
 };
 
