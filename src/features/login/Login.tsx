@@ -3,9 +3,9 @@ import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { GenericErrorModel, LoginUser } from 'src/common/models';
+import appApi from '../shared/data-access/app.api';
 import Auth from '../shared/ui/auth/Auth';
 import ErrorsForm from '../shared/ui/errors-form/ErrorsForm';
-import appApi from '../shared/data-access/app.api';
 
 const Login = () => {
   const navigate = useNavigate();

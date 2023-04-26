@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Article } from 'src/common/models';
+import { formatDate } from 'src/utils/format-date';
 
 const ArticleMeta = ({ article, children }: { article: Article; children: JSX.Element }) => {
   return (
@@ -11,7 +12,7 @@ const ArticleMeta = ({ article, children }: { article: Article; children: JSX.El
         <Link to={`/profile/${article.author.username}`} className="author">
           {article.author.username}
         </Link>
-        {/* <span className="date">{article.createdAt}</span> */}
+        <span className="date">{formatDate(article.createdAt)}</span>
       </div>
       {children}
     </div>

@@ -1,30 +1,31 @@
 import { Suspense, lazy } from 'react';
-import { Outlet, useNavigate, useRoutes } from 'react-router-dom';
+import { Navigate, Outlet, useNavigate, useRoutes } from 'react-router-dom';
 import NonPrivateRoutes from './features/shared/data-access/NonPrivateRoutes';
 import PrivateRoutes from './features/shared/data-access/PrivateRoutes';
 import Footer from './features/shared/ui/footer/Footer';
 import Header from './features/shared/ui/header/Header';
+import Spinner from './features/shared/ui/spinner/Spinner';
 import { useGetCurrentUser } from './hooks';
 import { history } from './utils/history';
 
 const Home = lazy(() => import('./features/home/Home'));
 const Login = lazy(() => import('./features/login/Login'));
 const Register = lazy(() => import('./features/register/Register'));
-// const Profile = lazy(() => import('profile/Profile'));
+const Profile = lazy(() => import('./features/profile/Profile'));
 const Settings = lazy(() => import('./features/settings/Settings'));
-// const Editor = lazy(() => import('editor/Editor'));
-// const Article = lazy(() => import('article/Article'));
+const Editor = lazy(() => import('./features/editor/Editor'));
+const Article = lazy(() => import('./features/article/Article'));
 const NotFound = lazy(() => import('./features/shared/ui/not-found/NotFound'));
 
 function App() {
   history.navigate = useNavigate();
-  const { data: user, isError, isSuccess } = useGetCurrentUser();
+  const { data: user, isFetching } = useGetCurrentUser();
 
   const routes = useRoutes([
     {
       index: true,
       element: (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Spinner />}>
           <Home user={user} />
         </Suspense>
       )
@@ -32,7 +33,7 @@ function App() {
     {
       path: 'login',
       element: (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Spinner />}>
           <NonPrivateRoutes user={user}>
             <Login />
           </NonPrivateRoutes>
@@ -42,67 +43,66 @@ function App() {
     {
       path: 'register',
       element: (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Spinner />}>
           <NonPrivateRoutes user={user}>
             <Register />
           </NonPrivateRoutes>
         </Suspense>
       )
     },
-    // {
-    //   path: 'profile/:username',
-    //   element: (
-    //     <Suspense fallback={<div>Loading...</div>}>
-    //       <PrivateRoutes  user={user}>
-    //         <Profile />
-    //       </PrivateRoutes>
-    //     </Suspense>
-    //   )
-    // },
+    {
+      path: 'profile/:username',
+      element: (
+        <Suspense fallback={<Spinner />}>
+          <Profile user={user} />
+        </Suspense>
+      )
+    },
     {
       path: 'settings',
       element: (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Spinner />}>
           <PrivateRoutes user={user}>
             <Settings user={user} />
           </PrivateRoutes>
         </Suspense>
       )
     },
-    // {
-    //   path: 'article/:slug',
-    //   element: (
-    //     <Suspense fallback={<div>Loading...</div>}>
-    //       <PrivateRoutes  user={user}>
-    //         <Article />
-    //       </PrivateRoutes>
-    //     </Suspense>
-    //   )
-    // },
-    // {
-    //   path: 'editor',
-    //   element: (
-    //     <Suspense fallback={<div>Loading...</div>}>
-    //       <PrivateRoutes  user={user}>
-    //         <Editor />
-    //       </PrivateRoutes>
-    //     </Suspense>
-    //   ),
-    //   children: [{ path: ':slug', element: <Editor /> }]
-    // },
     {
-      path: '*',
+      path: 'article/:slug',
       element: (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Spinner />}>
+          <Article />
+        </Suspense>
+      )
+    },
+    {
+      path: 'editor/:slug?',
+      element: (
+        <Suspense fallback={<Spinner />}>
+          <PrivateRoutes user={user}>
+            <Editor user={user} />
+          </PrivateRoutes>
+        </Suspense>
+      )
+    },
+    {
+      path: '404',
+      element: (
+        <Suspense fallback={<Spinner />}>
           <NotFound />
         </Suspense>
       )
+    },
+    {
+      path: '*',
+      element: <Navigate to="/404" />
     }
   ]);
 
   return (
     <>
-      {(isError || isSuccess) && (
+      {!isFetching && (
         <>
           <Header user={user} />
           {routes}

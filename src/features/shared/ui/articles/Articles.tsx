@@ -1,8 +1,17 @@
 import { Link } from 'react-router-dom';
-import { ApiStatus, Article } from 'src/common/models';
+import { ApiStatus, Article, ArticlesType } from 'src/common/models';
 import ArticleMeta from '../article-meta/ArticleMeta';
+import FavoriteButton from '../buttons/favorite-button/FavoriteButton';
 
-const Articles = ({ status, articles }: { status: ApiStatus; articles: Article[] }) => {
+const Articles = ({
+  status,
+  articles,
+  articlesType
+}: {
+  status: ApiStatus;
+  articles: Article[];
+  articlesType: ArticlesType;
+}) => {
   return (
     <>
       {articles.length > 0 && (
@@ -10,10 +19,13 @@ const Articles = ({ status, articles }: { status: ApiStatus; articles: Article[]
           {articles.map((article) => (
             <div key={article.slug} className="article-preview">
               <ArticleMeta article={article}>
-                <div></div>
-                {/* <FavoriteButton className="pull-xs-right" article={article}>
+                <FavoriteButton
+                  className="pull-xs-right"
+                  article={article}
+                  articlesType={articlesType}
+                >
                   <>{article.favoritesCount}</>
-                </FavoriteButton> */}
+                </FavoriteButton>
               </ArticleMeta>
               <Link className="preview-link" to={`/article/${article.slug}`}>
                 <h1>{article.title}</h1>

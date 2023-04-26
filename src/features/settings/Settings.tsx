@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { UpdateUser, User } from 'src/common/models';
+import { setToken } from 'src/utils/token';
 import appApi from '../shared/data-access/app.api';
 
 const Settings = ({ user }: { user: User | null }) => {
@@ -29,6 +30,7 @@ const Settings = ({ user }: { user: User | null }) => {
   const logout = () => {
     localStorage.removeItem('api_token');
     client.setQueryData(['user'], null);
+    setToken(null);
     navigate('/');
   };
 

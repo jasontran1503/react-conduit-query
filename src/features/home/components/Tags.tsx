@@ -9,8 +9,7 @@ const Tags = ({ onSelectTag }: { onSelectTag: Function }) => {
   } = useQuery({
     queryKey: ['tags'],
     queryFn: () => appApi.getTags(),
-    initialData: [],
-    staleTime: 60 * 1000
+    initialData: []
   });
 
   return (
