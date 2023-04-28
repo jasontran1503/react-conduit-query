@@ -1,8 +1,9 @@
+import { memo } from 'react';
 import { Link } from 'react-router-dom';
 import { Article } from 'src/common/models';
 import { formatDate } from 'src/utils/format-date';
 
-const ArticleMeta = ({ article, children }: { article: Article; children: JSX.Element }) => {
+const ArticleMeta = memo(({ article, children }: { article: Article; children: JSX.Element }) => {
   return (
     <div className="article-meta">
       <Link to={`/profile/${article.author.username}`}>
@@ -17,6 +18,6 @@ const ArticleMeta = ({ article, children }: { article: Article; children: JSX.El
       {children}
     </div>
   );
-};
+});
 
 export default ArticleMeta;

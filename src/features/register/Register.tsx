@@ -18,7 +18,7 @@ const Register = () => {
 
   const { register, handleSubmit } = useForm<NewUser>({ mode: 'onChange' });
 
-  const onSubmit: SubmitHandler<NewUser> = async (data) => {
+  const onSubmit: SubmitHandler<NewUser> = (data) => {
     setErrorsForm({});
     mutate(data, {
       onSuccess: () => {

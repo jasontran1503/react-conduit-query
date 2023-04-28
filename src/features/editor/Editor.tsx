@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import { NewArticle, UpdateArticle, User } from 'src/common/models';
+import { GenericErrorModel, NewArticle, UpdateArticle, User } from 'src/common/models';
 import appApi from '../shared/data-access/app.api';
 import ErrorsForm from '../shared/ui/errors-form/ErrorsForm';
 
@@ -36,17 +36,19 @@ const Editor = ({ user }: { user: User | null }) => {
   const { register, handleSubmit, setValue, reset } = useForm<NewArticle | UpdateArticle>({
     mode: 'onChange'
   });
-  const onSubmit: SubmitHandler<NewArticle | UpdateArticle> = async (data) => {
+
+  const onSubmit: SubmitHandler<NewArticle | UpdateArticle> = (data) => {
     setErrorsForm({});
     setValue('tagList', tags);
     const value = { ...data, tagList: tags };
 
     mutate(value, {
       onSuccess: (res) => {
-        client.setQueryData(['article'], res);
         reset();
+        client.setQueryData(['article'], res);
         navigate(`/article/${res.slug}`);
-      }
+      },
+      onError: (error) => setErrorsForm((error as GenericErrorModel).errors)
     });
   };
 
@@ -66,7 +68,7 @@ const Editor = ({ user }: { user: User | null }) => {
   };
 
   useEffect(() => {
-    const setValueForm = async () => {
+    const setValueForm = () => {
       if (article) {
         if (article.author.username === user?.username) {
           setValue('title', article.title);

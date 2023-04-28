@@ -1,4 +1,6 @@
-const ErrorsForm = ({ errors }: { errors: Record<string, string[]> }) => {
+import { memo } from 'react';
+
+const ErrorsForm = memo(({ errors }: { errors: Record<string, string[]> }) => {
   const errorList = Object.keys(errors).map((key) => `${key} ${errors[key]}`);
 
   return (
@@ -12,6 +14,6 @@ const ErrorsForm = ({ errors }: { errors: Record<string, string[]> }) => {
       )}
     </>
   );
-};
+});
 
 export default ErrorsForm;

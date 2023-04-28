@@ -12,7 +12,6 @@ export const useGetCurrentUser = () =>
     queryKey: ['user'],
     queryFn: () => {
       const token = localStorage.getItem('api_token');
-      console.log(token);
       if (token) {
         setToken(token);
         return appApi.getCurrentUser();

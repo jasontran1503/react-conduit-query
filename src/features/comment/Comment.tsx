@@ -44,7 +44,7 @@ const Comment = ({ slug }: { slug: string }) => {
       return;
     }
     deleteCommentMutation.mutate(id, {
-      onSuccess: () => client.setQueryData(['comment'], () => comments.filter((x) => x.id === id))
+      onSuccess: () => client.setQueryData(['comment'], () => comments.filter((x) => x.id !== id))
     });
   };
 

@@ -1,9 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { memo } from 'react';
 import { Article } from 'src/common/models';
 import appApi from 'src/features/shared/data-access/app.api';
 import { useGetQueryData } from 'src/hooks';
 
-const FollowButton = ({ following, username }: { following: boolean; username: string }) => {
+const FollowButton = memo(({ following, username }: { following: boolean; username: string }) => {
   const client = useQueryClient();
   const article = useGetQueryData<Article>(['article']);
 
@@ -40,6 +41,6 @@ const FollowButton = ({ following, username }: { following: boolean; username: s
       &nbsp; {following ? 'Unfollow' : 'Follow'} {username}
     </button>
   );
-};
+});
 
 export default FollowButton;

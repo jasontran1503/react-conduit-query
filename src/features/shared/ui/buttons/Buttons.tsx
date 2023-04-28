@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { memo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Article, User } from 'src/common/models';
 import { useGetQueryData } from 'src/hooks';
@@ -6,7 +7,7 @@ import appApi from '../../data-access/app.api';
 import FavoriteButton from './favorite-button/FavoriteButton';
 import FollowButton from './follow-button/FollowButton';
 
-const Buttons = ({ article }: { article: Article }) => {
+const Buttons = memo(({ article }: { article: Article }) => {
   const navigate = useNavigate();
   const client = useQueryClient();
   const username = useGetQueryData<User>(['user'])?.username;
@@ -56,6 +57,6 @@ const Buttons = ({ article }: { article: Article }) => {
       )}
     </>
   );
-};
+});
 
 export default Buttons;
